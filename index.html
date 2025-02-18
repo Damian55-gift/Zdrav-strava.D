@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recepty</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .category {
+      margin: 20px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 30%;
+      text-align: center;
+    }
+    .category h3 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+    .meal {
+      margin: 10px;
+      padding: 10px;
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .meal:hover {
+      background-color: #b2ff59;
+    }
+    .recipe-detail {
+      margin-top: 30px;
+      display: none;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .recipe-detail h2 {
+      text-align: center;
+    }
+    .recipe-detail ul, .recipe-detail ol {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Recepty na každý deň</h1>
+    <p>Vyberte si jedlo a pozrite si ingrediencie a postup</p>
+  </header>
+
+  <div class="container">
+    <div class="category">
+      <h3>Sladké</h3>
+      <div class="meal" onclick="showRecipe('sweet1')">Koláč</div>
+      <div class="meal" onclick="showRecipe('sweet2')">Palačinky</div>
+      <div class="meal" onclick="showRecipe('sweet3')">Tiramisu</div>
+      <div class="meal" onclick="showRecipe('sweet4')">Brownie</div>
+      <div class="meal" onclick="showRecipe('sweet5')">Jablkový koláč</div>
+      <div class="meal" onclick="showRecipe('sweet6')">Čokoládový mousse</div>
+    </div>
+    <div class="category">
+      <h3>Slané</h3>
+      <div class="meal" onclick="showRecipe('salty1')">Pizza</div>
+      <div class="meal" onclick="showRecipe('salty2')">Sandwich</div>
+      <div class="meal" onclick="showRecipe('salty3')">Omáčka na špagety</div>
+      <div class="meal" onclick="showRecipe('salty4')">Lasagne</div>
+      <div class="meal" onclick="showRecipe('salty5')">Quiche</div>
+      <div class="meal" onclick="showRecipe('salty6')">Cevapčiči</div>
+    </div>
+    <div class="category">
+      <h3>Obed / Večera</h3>
+      <div class="meal" onclick="showRecipe('lunch1')">Špagety</div>
+      <div class="meal" onclick="showRecipe('lunch2')">Kuracie prsia</div>
+      <div class="meal" onclick="showRecipe('lunch3')">Zeleninový šalát</div>
+      <div class="meal" onclick="showRecipe('lunch4')">Rizoto</div>
+      <div class="meal" onclick="showRecipe('lunch5')">Grilovaný losos</div>
+      <div class="meal" onclick="showRecipe('lunch6')">Steak</div>
+    </div>
+  </div>
+
+  <div id="recipe-detail" class="recipe-detail">
+    <h2>Recept na jedlo</h2>
+    <h3 id="meal-name"></h3>
+    <h4>Ingrediencie:</h4>
+    <ul id="ingredients-list"></ul>
+    <h4>Postup:</h4>
+    <ol id="steps-list"></ol>
+  </div>
+
+  <script>
+    const recipes = {
+      sweet1: {
+        name: 'Koláč',
+        ingredients: ['Múka', 'Cukor', 'Vajcia', 'Maslo', 'Mlieko'],
+        steps: [
+          'Zmiešajte múku, cukor, vajcia, maslo a mlieko.',
+          'Vylejte do formy a pečte na 180°C 30 minút.',
+          'Nechajte vychladnúť a podávajte.'
+        ]
+      },
+      sweet2: {
+        name: 'Palačinky',
+        ingredients: ['Múka', 'Vajcia', 'Mlieko', 'Cukor', 'Soľ'],
+        steps: [
+          'Zmiešajte všetky ingrediencie do hladkého cesta.',
+          'Smažte na horúcej panvici, kým sa nezlatistia.',
+          'Podávajte s obľúbeným ovocím alebo džemom.'
+        ]
+      },
+      sweet3: {
+        name: 'Tiramisu',
+        ingredients: ['Mascarpone', 'Káva', 'Cukor', 'Piškóty', 'Kakao'],
+        steps: [
+          'Namočte piškóty do kávy.',
+          'Vrstvite piškóty a mascarpone v pohári.',
+          'Posypte kakaom a nechajte stuhnúť v chladničke.'
+        ]
+      },
+      sweet4: {
+        name: 'Brownie',
+        ingredients: ['Čokoláda', 'Maslo', 'Cukor', 'Vajcia', 'Múka'],
+        steps: [
+          'Roztopte čokoládu a maslo.',
+          'Pridajte cukor, vajcia a múku.',
+          'Pečte na 180°C 25 minút.'
+        ]
+      },
+      sweet5: {
+        name: 'Jablkový koláč',
+        ingredients: ['Jablká', 'Múka', 'Cukor', 'Vajcia', 'Maslo'],
+        steps: [
+          'Olúpte a nakrájajte jablká.',
+          'Zmiešajte ingrediencie a pečte na 180°C 45 minút.',
+          'Nechajte vychladnúť a podávajte.'
+        ]
+      },
+      sweet6: {
+        name: 'Čokoládový mousse',
+        ingredients: ['Čokoláda', 'Smotana', 'Vajcia'],
+        steps: [
+          'Roztopte čokoládu a zmiešajte s ušľahanou smotanou.',
+          'Pridajte vajcia a premiešajte.',
+          'Nechajte stuhnúť v chladničke 2 hodiny.'
+        ]
+      },
+      salty1: {
+        name: 'Pizza',
+        ingredients: ['Cesto na pizzu', 'Parmezán', 'Rajčiny', 'Mozzarella', 'Oregano'],
+        steps: [
+          'Rozvaľkajte cesto a pokvapkajte rajčinami.',
+          'Posypte syrom a mozzarella.',
+          'Pečte na 220°C 15 minút.'
+        ]
+      },
+      salty2: {
+        name: 'Sandwich',
+        ingredients: ['Chlieb', 'Syr', 'Šunka', 'Zelenina', 'Maslo'],
+        steps: [
+          'Na chleba položte syr, šunku a zeleninu.',
+          'Maslom natrite vonkajšky chleba.',
+          'Smažte na panvici, kým nebude chrumkavý.'
+        ]
+      },
+      salty3: {
+        name: 'Omáčka na špagety',
+        ingredients: ['Rajčiny', 'Cibuľa', 'Cesnak', 'Oregano', 'Olivový olej'],
+        steps: [
+          'Opečte cibuľu a cesnak na oleji.',
+          'Pridajte rajčiny a oregano.',
+          'Nechajte povariť 20 minút a podávajte na špagetách.'
+        ]
+      },
+      salty4: {
+        name: 'Lasagne',
+        ingredients: ['Lasagne pláty', 'Mleté mäso', 'Parmezán', 'Rajčiny', 'Bešamelová omáčka'],
+        steps: [
+          'Vrstvite lasagne, mleté mäso a bešamel.',
+          'Pečte na 180°C 45 minút.',
+          'Podávajte s parmezánom.'
+        ]
+      },
+      salty5: {
+        name: 'Quiche',
+        ingredients: ['Kôrka na quiche', 'Šunka', 'Syr', 'Vajcia', 'Smotana'],
+        steps: [
+          'Zmiešajte vajcia a smotanu.',
+          'Pridajte šunku a syr do kôrky.',
+          'Pečte na 180°C 30 minút.'
+        ]
+      },
+      salty6: {
+        name: 'Cevapčiči',
+        ingredients: ['Mleté mäso', 'Cibuľa', 'Česnak', 'Soľ', 'Koreni'],
+        steps: [
+          'Zmiešajte všetky ingrediencie.',
+          'Formujte malé klobásky a grilujte.',
+          'Podávajte s pečenými zemiakmi.'
+        ]
+      },
+      lunch1: {
+        name: 'Špagety',
+        ingredients: ['Špagety', 'Rajčiny', 'Cesnak', 'Olivový olej', 'Bazalka'],
+        steps: [
+          'Uvarte špagety.',
+          'Opečte cesnak a rajčiny na oleji.',
+          'Zmiešajte a podávajte s bazalkou.'
+        ]
+      },
+      lunch2: {
+        name: 'Kuracie prsia',
+        ingredients: ['Kuracie prsia', 'Soľ', 'Pepper', 'Olivový olej'],
+        steps: [
+          'Opečte kuracie prsia na oleji.',
+          'Dochutťe soľou a peprom.',
+          'Podávajte s prílohou.'
+        ]
+      },
+      lunch3: {
+        name: 'Zeleninový šalát',
+        ingredients: ['Zelenina', 'Olivový olej', 'Soľ', 'Pepper'],
+        steps: [
+          'Nakrájajte zeleninu.',
+          'Pridajte olivový olej a dochuťte.'
+        ]
+      },
+      lunch4: {
+        name: 'Rizoto',
+        ingredients: ['Ryža', 'Kuracie mäso', 'Zelenina', 'Parmezán'],
+        steps: [
+          'Opečte kuracie mäso a zeleninu.',
+          'Pridajte ryžu a varte.',
+          'Posypte parmezánom a podávajte.'
+        ]
+      },
+      lunch5: {
+        name: 'Grilovaný losos',
+        ingredients: ['Losos', 'Olivový olej', 'Soľ', 'Citrón'],
+        steps: [
+          'Opečte lososa na grile.',
+          'Dochutťe soľou a citrónom.'
+        ]
+      },
+      lunch6: {
+        name: 'Steak',
+        ingredients: ['Steak', 'Soľ', 'Pepper', 'Olivový olej'],
+        steps: [
+          'Opečte steak na panvici.',
+          'Dochutťe soľou a peprom.'
+        ]
+      }
+    };
+
+    function showRecipe(recipeId) {
+      const recipe = recipes[recipeId];
+      document.getElementById('meal-name').textContent = recipe.name;
+      document.getElementById('ingredients-list').innerHTML = recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('');
+      document.getElementById('steps-list').innerHTML = recipe.steps.map(step => `<li>${step}</li>`).join('');
+      document.getElementById('recipe-detail').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
